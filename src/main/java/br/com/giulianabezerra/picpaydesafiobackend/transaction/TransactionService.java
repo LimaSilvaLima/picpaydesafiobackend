@@ -2,6 +2,7 @@ package br.com.giulianabezerra.picpaydesafiobackend.transaction;
 
 import org.springframework.stereotype.Service;
 
+import br.com.giulianabezerra.picpaydesafiobackend.wallet.Wallet;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.WalletRepository;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.WalletType;
 
@@ -43,10 +44,16 @@ public class TransactionService {
 
         walletRepository.findById(transaction.payee())
             .map(payee -> walletRepository.findById(transaction.payer())
-                .map(payer -> payer.type() == WalletType.COMUM.getValue() &&
-                    payer.balance().compareTo(transaction.value()) >= 0 &&
-                        !payer.id().equals(transaction.payee()) ? transaction : null ));
+                .map(payer -> isTransactionValid(transaction, payer) ? transaction : null )
+                .orElseThrow())
+            .orElseThrow();
             
+    }
+
+    private boolean isTransactionValid(Transaction transaction, Wallet payer) {
+        return payer.type() == WalletType.COMUM.getValue() &&
+            payer.balance().compareTo(transaction.value()) >= 0 &&
+                !payer.id().equals(transaction.payee());
     }
 
 }
