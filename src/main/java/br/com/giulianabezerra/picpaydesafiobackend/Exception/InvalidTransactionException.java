@@ -1,5 +1,10 @@
-package br.com.giulianabezerra.picpaydesafiobackend.Exception;
+package br.com.giulianabezerra.picpaydesafiobackend.exception;
+
+
 
 public class InvalidTransactionException extends RuntimeException{
-    super(message);
+	
+	public InvalidTransactionException(String message) {
+		super(message);
+	}
 }
