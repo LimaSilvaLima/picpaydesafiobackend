@@ -1,4 +1,4 @@
-package br.com.giulianabezerra.picpaydesafiobackend.exception;
+package br.com.giulianabezerra.picpaydesafiobackend.transaction;
 
 
 

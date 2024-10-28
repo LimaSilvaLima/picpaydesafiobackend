@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.giulianabezerra.picpaydesafiobackend.authotization.AuthorizerService;
-import br.com.giulianabezerra.picpaydesafiobackend.exception.InvalidTransactionException;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.Wallet;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.WalletRepository;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.WalletType;
@@ -29,7 +28,6 @@ public class TransactionService {
     public Transaction create(Transaction transaction){
         // 1 - validar
         validate(transaction);
-
         //2 - criart a transação
         var newTransaction = transactionRepository.save(transaction);
         
@@ -39,6 +37,9 @@ public class TransactionService {
         walletRepository.save(wallet.debit(transaction.value()));
         // 4 - chamar serviços externos
 
+        //autorize trasaction
+        authorizerService.authorize(transaction);
+        
         return newTransaction;
 
 
