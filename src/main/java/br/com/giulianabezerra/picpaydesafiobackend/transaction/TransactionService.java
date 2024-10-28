@@ -2,6 +2,8 @@ package br.com.giulianabezerra.picpaydesafiobackend.transaction;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import br.com.giulianabezerra.picpaydesafiobackend.authotization.AuthorizerService;
 import br.com.giulianabezerra.picpaydesafiobackend.exception.InvalidTransactionException;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.Wallet;
 import br.com.giulianabezerra.picpaydesafiobackend.wallet.WalletRepository;
@@ -13,11 +15,14 @@ import br.com.giulianabezerra.picpaydesafiobackend.wallet.WalletType;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final  WalletRepository walletRepository;
+    private final AuthorizerService authorizerService;
 
-    public TransactionService (TransactionRepository transactionRepository, WalletRepository walletRepository){
+
+    public TransactionService (TransactionRepository transactionRepository, 
+    WalletRepository walletRepository, AuthorizerService authorizerService){
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
-        
+        this.authorizerService = authorizerService;
     }
 
     @Transactional
