@@ -21,6 +21,11 @@ public class NotificationConsumer {
 	@KafkaListener(topics  = "transaction-notification", groupId ="picpay-desafio-backend")
 	public void receiveNotication(Transaction transaction) {
 		
+		var response = restClient.get().retrieve().toEntity(Notification.class);
+		
+		if (response.getStatusCode().isError() || !response.getBody().message());
+		
+		
 	}
 	
 }
