@@ -1,5 +1,7 @@
 package br.com.giulianabezerra.picpaydesafiobackend.transaction;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +38,13 @@ public class TransactionService {
         //2 - criart a transação
         var newTransaction = transactionRepository.save(transaction);
         
-        // 3 - debitar da ccarteira
+        // 3 - debitar da carteira
 
-        var wallet = walletRepository.findById(transaction.payer()).get();
-        walletRepository.save(wallet.debit(transaction.value()));
+        var walletPayer = walletRepository.findById(transaction.payer()).get();
+        var walletPayee = walletRepository.findById(transaction.payee()).get();
+        walletRepository.save(walletPayer.debit(transaction.value()));
+        walletRepository.save(walletPayee.credit(transaction.value()));
+        
         // 4 - chamar serviços externos
 
         //autorize trasaction
@@ -67,5 +72,10 @@ public class TransactionService {
             payer.balance().compareTo(transaction.value()) >= 0 &&
                 !payer.id().equals(transaction.payee());
     }
+
+	public List<Transaction> list() {
+		
+		return transactionRepository.findAll();
+	}
 
 }
